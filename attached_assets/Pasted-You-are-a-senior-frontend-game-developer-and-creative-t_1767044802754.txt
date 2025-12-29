@@ -1,0 +1,124 @@
+You are a senior frontend game developer and creative technologist.
+
+Your task is to build a complete web-based 2D stacking game using:
+- Next.js (App Router)
+- React
+- HTML5 Canvas
+- Phaser.js for game engine
+- Optional MediaPipe Hands for hand gesture control
+
+The game concept:
+A branded promotional stacking game where the player builds the Hilton hotel by stacking its parts correctly.
+
+========================
+CORE GAME CONCEPT
+========================
+- The Hilton hotel is visually split into exactly 6 vertical sections (from bottom to top).
+- Each section is represented as a separate sprite/image.
+- A crane moves the current section horizontally (left-right).
+- The player must drop the section at the right moment to stack it on top of the previous one.
+- If the alignment is incorrect beyond a threshold → Game Over.
+- If alignment is partially correct → the block is trimmed and stacking continues.
+
+========================
+GAME FLOW
+========================
+1. Start Screen
+   - Display a "START GAME" button
+   - Show Hilton branding and short instruction text
+
+2. Countdown
+   - After clicking START, show a fullscreen animated countdown:
+     3 → 2 → 1 → GO
+   - Then automatically start the game
+
+3. Gameplay
+   - Crane moves the active block left and right
+   - Player input options:
+     - Hand gesture (default)
+     - Keyboard (optional, disabled by default)
+   - When input is triggered, the block drops vertically
+
+4. End Result
+   - If all 6 parts are stacked successfully:
+     - Show a winning screen
+     - Display: "Congratulations! You won a discount"
+     - Discount logic:
+       - Max discount: 50%
+       - Discount is proportional to how many parts were stacked correctly
+       - Example:
+         - 6/6 → 50%
+         - 5/6 → ~41%
+         - 4/6 → ~33%
+     - Display discount value clearly
+
+========================
+CONFIGURABLE SETTINGS (IMPORTANT)
+========================
+Create a settings/config file where the following values can be easily changed:
+- Total number of building parts (default: 6)
+- Maximum discount percentage (default: 50)
+- Block movement speed
+- Allowed alignment tolerance
+- Enable/disable keyboard control
+- Enable/disable hand gesture control
+
+========================
+INPUT METHODS
+========================
+1. Hand Gesture Control (PRIMARY)
+   - Use webcam
+   - Detect hand using MediaPipe Hands (or similar)
+   - Gesture rule:
+     - Open palm OR downward hand movement → DROP BLOCK
+   - Must work without keyboard
+
+2. Keyboard Control (SECONDARY)
+   - Disabled by default
+   - Can be enabled from Settings screen
+   - Use SPACE or ENTER to drop the block
+
+========================
+SETTINGS MENU
+========================
+- Accessible from Start Screen and Pause Menu
+- Options:
+  - Toggle keyboard control ON/OFF
+  - Toggle hand gesture control ON/OFF
+  - Adjust difficulty (easy / normal / hard)
+- Keyboard gameplay must be hidden inside settings and not active by default
+
+========================
+TECHNICAL REQUIREMENTS
+========================
+- Use Next.js App Router
+- Phaser must run only on client-side
+- Use dynamic imports if needed
+- Game logic must be modular and clean
+- Separate files for:
+  - GameScene
+  - UI components
+  - Settings
+  - Gesture controller
+- Ensure good performance for kiosk / large screen usage
+
+========================
+VISUAL STYLE
+========================
+- Clean, modern, promotional style
+- Hilton-inspired colors (dark blue, gold accents)
+- Smooth animations
+- Clear readable UI
+- Mobile and desktop friendly
+
+========================
+OUTPUT EXPECTATIONS
+========================
+- Provide full project structure
+- Provide complete working code
+- Include comments explaining important logic
+- Ensure the game can run directly in Replit
+- Do NOT use placeholder text for core logic
+- Game must be functional, not a mockup
+
+Build the project as if it will be deployed for a real promotional campaign in a hotel lobby kiosk.
