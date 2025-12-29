@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertGameScoreSchema, gameScores, GameSettingsSchema } from './schema';
+import { insertGameScoreSchema, GameSettingsSchema, type GameScore } from './types';
 
 export const errorSchemas = {
   validation: z.object({
@@ -17,7 +17,7 @@ export const api = {
       method: 'GET' as const,
       path: '/api/scores',
       responses: {
-        200: z.array(z.custom<typeof gameScores.$inferSelect>()),
+        200: z.array(z.custom<GameScore>()),
       },
     },
     create: {
@@ -25,12 +25,13 @@ export const api = {
       path: '/api/scores',
       input: insertGameScoreSchema,
       responses: {
-        201: z.custom<typeof gameScores.$inferSelect>(),
+        201: z.custom<GameScore>(),
         400: errorSchemas.validation,
       },
     },
   },
 };
+
 
 export function buildUrl(path: string, params?: Record<string, string | number>): string {
   let url = path;

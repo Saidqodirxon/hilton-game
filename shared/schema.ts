@@ -1,36 +1,43 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod";
+import mongoose, { Schema, Document } from "mongoose";
+import { insertGameScoreSchema, GameSettingsSchema } from "./types";
 
-// === TABLE DEFINITIONS ===
-export const gameScores = pgTable("game_scores", {
-  id: serial("id").primaryKey(),
-  playerName: text("player_name").notNull().default("Guest"),
-  score: integer("score").notNull(), // Percentage 0-100 or raw score
-  discountEarned: integer("discount_earned").notNull(), // 0-50
-  partsStacked: integer("parts_stacked").notNull(), // 0-6
-  createdAt: timestamp("created_at").defaultNow(),
+// Re-export types for backward compatibility
+export * from "./types";
+
+// === MONGOOSE SCHEMA (server-only) ===
+export interface IGameScore extends Document {
+  playerName: string;
+  score: number;
+  discountEarned: number;
+  partsStacked: number;
+  createdAt: Date;
+}
+
+const gameScoreSchema = new Schema<IGameScore>({
+  playerName: {
+    type: String,
+    required: true,
+    default: "Guest",
+  },
+  score: {
+    type: Number,
+    required: true,
+  },
+  discountEarned: {
+    type: Number,
+    required: true,
+  },
+  partsStacked: {
+    type: Number,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-// === SCHEMAS ===
-export const insertGameScoreSchema = createInsertSchema(gameScores).omit({ id: true, createdAt: true });
-
-// === TYPES ===
-export type GameScore = typeof gameScores.$inferSelect;
-export type InsertGameScore = z.infer<typeof insertGameScoreSchema>;
-
-export type CreateScoreRequest = InsertGameScore;
-export type ScoreResponse = GameScore;
-
-// === GAME SETTINGS TYPE (Client-side mainly, but defined here for consistency) ===
-export const GameSettingsSchema = z.object({
-  totalParts: z.number().default(6),
-  maxDiscount: z.number().default(50),
-  moveSpeed: z.number().default(5), // Speed of the crane
-  tolerance: z.number().default(10), // Pixels of tolerance for "perfect" drop
-  enableKeyboard: z.boolean().default(false),
-  enableGestures: z.boolean().default(true),
-  difficulty: z.enum(["easy", "normal", "hard"]).default("normal"),
-});
-
-export type GameSettings = z.infer<typeof GameSettingsSchema>;
+export const GameScoreModel = mongoose.model<IGameScore>(
+  "GameScore",
+  gameScoreSchema
+);

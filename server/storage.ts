@@ -1,10 +1,8 @@
-import { db } from "./db";
 import {
-  gameScores,
+  GameScoreModel,
   type InsertGameScore,
-  type GameScore
+  type GameScore,
 } from "@shared/schema";
-import { desc } from "drizzle-orm";
 
 export interface IStorage {
   createScore(score: InsertGameScore): Promise<GameScore>;
@@ -13,16 +11,31 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   async createScore(insertScore: InsertGameScore): Promise<GameScore> {
-    const [score] = await db.insert(gameScores).values(insertScore).returning();
-    return score;
+    const score = await GameScoreModel.create(insertScore);
+    return {
+      id: score._id.toString(),
+      playerName: score.playerName,
+      score: score.score,
+      discountEarned: score.discountEarned,
+      partsStacked: score.partsStacked,
+      createdAt: score.createdAt,
+    };
   }
 
   async getTopScores(limit = 10): Promise<GameScore[]> {
-    return await db
-      .select()
-      .from(gameScores)
-      .orderBy(desc(gameScores.score))
-      .limit(limit);
+    const scores = await GameScoreModel.find()
+      .sort({ score: -1 })
+      .limit(limit)
+      .lean();
+
+    return scores.map((score) => ({
+      id: score._id.toString(),
+      playerName: score.playerName,
+      score: score.score,
+      discountEarned: score.discountEarned,
+      partsStacked: score.partsStacked,
+      createdAt: score.createdAt,
+    }));
   }
 }
 
