@@ -1,5 +1,9 @@
-import { z } from 'zod';
-import { insertGameScoreSchema, GameSettingsSchema, type GameScore } from './types';
+import { z } from "zod";
+import {
+  insertGameScoreSchema,
+  GameSettingsSchema,
+  type GameScore,
+} from "./types";
 
 export const errorSchemas = {
   validation: z.object({
@@ -14,15 +18,15 @@ export const errorSchemas = {
 export const api = {
   scores: {
     list: {
-      method: 'GET' as const,
-      path: '/api/scores',
+      method: "GET" as const,
+      path: "/api/scores",
       responses: {
         200: z.array(z.custom<GameScore>()),
       },
     },
     create: {
-      method: 'POST' as const,
-      path: '/api/scores',
+      method: "POST" as const,
+      path: "/api/scores",
       input: insertGameScoreSchema,
       responses: {
         201: z.custom<GameScore>(),
@@ -32,8 +36,10 @@ export const api = {
   },
 };
 
-
-export function buildUrl(path: string, params?: Record<string, string | number>): string {
+export function buildUrl(
+  path: string,
+  params?: Record<string, string | number>
+): string {
   let url = path;
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
