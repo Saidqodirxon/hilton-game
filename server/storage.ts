@@ -1,38 +1,29 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { db } from "./db";
+import {
+  gameScores,
+  type InsertGameScore,
+  type GameScore
+} from "@shared/schema";
+import { desc } from "drizzle-orm";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  createScore(score: InsertGameScore): Promise<GameScore>;
+  getTopScores(limit?: number): Promise<GameScore[]>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
+export class DatabaseStorage implements IStorage {
+  async createScore(insertScore: InsertGameScore): Promise<GameScore> {
+    const [score] = await db.insert(gameScores).values(insertScore).returning();
+    return score;
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async getTopScores(limit = 10): Promise<GameScore[]> {
+    return await db
+      .select()
+      .from(gameScores)
+      .orderBy(desc(gameScores.score))
+      .limit(limit);
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
