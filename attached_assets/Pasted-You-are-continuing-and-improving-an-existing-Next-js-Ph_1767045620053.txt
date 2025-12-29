@@ -1,0 +1,137 @@
+You are continuing and improving an existing Next.js + Phaser stacking game project.
+
+Your task is to FIX bugs, IMPROVE visuals, and COMPLETE missing game logic based on the following feedback.
+
+========================
+CRITICAL BUG FIXES (MUST FIX)
+========================
+
+1. DISCOUNT RESULT NOT SHOWING (HAND GESTURE MODE)
+- When playing with hand gesture control, the final discount percentage is NOT displayed.
+- Fix this so that:
+  - The discount calculation works for BOTH input modes:
+    - Hand gesture
+    - Keyboard
+  - The result screen ALWAYS appears after the game ends.
+
+2. BLOCK DISAPPEARING / FREEZING ISSUE
+- After dropping a block correctly, sometimes:
+  - The block becomes invisible
+  - Or freezes and stops rendering
+- Fix rendering and physics update logic so that:
+  - Every successfully placed block remains visible
+  - Blocks stack properly and stay on screen
+  - No sprite disappears after placement
+
+3. GAME END STATE IS UNCLEAR
+- Currently the game sometimes freezes without explanation
+- The game must clearly know when it ends:
+  - WIN → all blocks placed
+  - LOSE → misalignment beyond tolerance
+- After game ends:
+  - Show a clear end screen
+  - Disable further input
+  - Display result and buttons
+
+4. REPLAY FUNCTIONALITY
+- After the game ends (win or lose):
+  - Show a "QAYTA O‘YNASH" (Play Again) button
+  - Reset the game state cleanly
+  - Restart from countdown (3,2,1)
+
+========================
+GAME LOGIC IMPROVEMENTS
+========================
+
+5. DYNAMIC DISCOUNT CALCULATION (VERY IMPORTANT)
+- Discount must be based on PLAYER SKILL, not just block count.
+
+Rules:
+- Maximum discount: 50%
+- Factors affecting discount:
+  1. Number of blocks successfully placed
+  2. Alignment accuracy (overlap width)
+- If player stacks blocks very precisely and keeps them long → HIGHER discount
+- If blocks are short / badly aligned → LOWER discount
+- If player loses early → SMALL discount
+
+Example:
+- Perfect play → 50%
+- Medium accuracy → 30–40%
+- Poor play → 10–20%
+
+Discount formula must be:
+- Clear
+- Deterministic
+- Easy to tweak from config
+
+========================
+VISUAL IMPROVEMENTS (BLOCK DESIGN)
+========================
+
+6. BLOCK / BRICK DESIGN UPGRADE
+- Improve the visual quality of the blocks:
+  - Use better shapes
+  - Add subtle shadows
+  - Slight depth illusion (fake 3D look)
+  - Smooth drop animation
+- Each hotel section should feel like a real building part
+- No plain rectangles — make them visually polished
+
+========================
+UX & LANGUAGE REQUIREMENTS
+========================
+
+7. CLEAR GAME STATES (UZBEK LANGUAGE)
+All texts must be in UZBEK:
+
+- Start: 
+  "O‘YINNI BOSHLASH"
+- Countdown:
+  "3", "2", "1", "BOSHLANDI!"
+- Lose:
+  "Qavat noto‘g‘ri joylashtirildi"
+- Win:
+  "Tabriklaymiz! Siz chegirma yutdingiz"
+- Discount:
+  "Siz yutgan chegirma: XX%"
+- Replay:
+  "QAYTA O‘YNASH"
+
+Everything must be understandable for non-technical users.
+
+========================
+TECHNICAL REQUIREMENTS
+========================
+
+8. STATE MANAGEMENT
+- Ensure clear separation of states:
+  - idle
+  - countdown
+  - playing
+  - win
+  - lose
+- No state overlap
+- No freezing between states
+
+9. CODE QUALITY
+- Refactor messy logic if needed
+- Add comments where bugs were fixed
+- Make discount logic reusable
+- Keep config values adjustable
+
+========================
+FINAL EXPECTATION
+========================
+- The game must feel stable and complete
+- No freezing
+- No missing UI
+- Discount always shows
+- Replay always works
+- Visually polished blocks
+- Uzbek language throughout
+
+Fix everything as if this game is going live in a real hotel promotional kiosk.
+Do NOT skip edge cases.
+Do NOT leave TODOs.
+Deliver production-quality improvements.
